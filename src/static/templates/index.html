@@ -7,34 +7,45 @@
 </head>
 <body>
 
-<form id="question-form">
-    <div class="question-area">
-        <label for="question-input">Your Question:</label><br>
-        <textarea id="question-input" name="question" rows="6" cols="50" placeholder="Type your question here..."></textarea>
-    </div>
+<div class="container">
+    <h2>ChatGPT API Usage Demo</h2>
 
-    <div class="button">
-        <div class="column text-center">
-            <button type="submit" class="custom-blue-btn">Ask question</button>
+    <div class="container">
+        <h2>Open AI Demo</h2>
+
+        <div class="container">
+            <div class="card m-3">
+                <div class="card-body">
+                    <h5 class="card-title">Ask me! (simple)</h5>
+                    <form id="form-joke" class="container">
+                        <div class="row">
+                            <p class="card-text">Ask me about WoW classic.</p>
+                            <label for="about">Topic</label>
+                            <textarea id="about" class="result" placeholder="Enter your question here..."></textarea>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="column text-end">
+                                <button type="submit" class="btn btn-primary" id="btn-get-joke">Send question</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="spinner1" class="spinner-border text-success" role="status" style="margin-left:1em;border-radius: 50%;display:none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p id="result" class="result"></p>
+
+                    <div class="response-area">
+                        <textarea readonly></textarea>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-</form>
-
-<div class="question-area">
-    <label for="question-input">Your answer:</label><br>
-    <textarea id="question-input" name="question" rows="6" cols="50" placeholder="Your answers goes here..."></textarea>
 </div>
 
-
-
-<div class="response-area" id="response-area">
-    <!-- This will show the answer later -->
-</div>
-
+<script src="../../js/index.js"></script>
 
 </body>
-
-<script type="module" src="../../js/index.js"></script>
-
-
 </html>
+

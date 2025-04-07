@@ -1,40 +1,68 @@
-import {sendQuestion} from "./indexAPI.js";
+const SERVER_URL = 'http://localhost:8080/api/v1/';
 
 
-console.log("javascript filen er med");
+document.getElementById('form-joke').addEventListener('submit', getAnswer);
+// document.getElementById('form-answer').addEventListener('submit', getInfo);
 
-document.getElementById('question-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the form from reloading the page
-    document.getElementById("button").onclick = handleQuestion
-    // Retrieve the question entered in the textarea
-    var question = document.getElementById('question-input').value;
+async function getAnswer(event) {
+    // Prevent the form from reloading the page.
+    event.preventDefault();
 
-    // Check if the question is not empty
-    if (question.trim() !== "") {
-        console.log("User's question:", question);
-        // You can add logic to handle the question, like fetching a joke or answer
-    } else {
-        alert("Please enter a question before submitting.");
+    const URL = `${SERVER_URL}joke?about= + ${document.getElementById('about').value}`
+    const spinner = document.getElementById('spinner1');
+    const result = document.getElementById('result');
+    result.style.color = "black";
+
+    try {
+        spinner.style.display = "block";
+        const response = await fetch(URL).then(handleHttpErrors)
+        document.getElementById('result').innerText = response.answer;
+    } catch (e) {
+        result.style.color = "red";
+        result.innerText = e.message;
     }
-});
-
-async function handleQuestion(event) {
-    event.preventDefault(); // Prevent the form from reloading the page
-
-    const question = document.getElementById('question-input').value;
-
-    if (question.trim() !== "") {
-        console.log("User's question:", question);
-        const response = await sendQuestion(question);
-
-        if (response) {
-            console.log('Question sent successfully!');
-            // Display the response (for example, show a joke or answer):
-            console.log('Response:', response);
-        } else {
-            console.error('Failed to send the question');
-        }
-    } else {
-        alert("Please enter a question before submitting.");
+    finally {
+        spinner.style.display = "none";
     }
+}
+
+
+async function getInfo(event) {
+    // Prevent the form from reloading the page.
+    event.preventDefault();
+
+    const URL = `${SERVER_URL}owninfo?question= + ${document.getElementById('the-question').value}`
+    const spinner = document.getElementById('spinner3');
+    const result3 = document.getElementById('result3');
+    result3.innerText = ""
+    result3.style.color = "black";
+    try {
+        spinner.style.display = "block";
+        const reply = await fetch(URL).then(handleHttpErrors)
+        document.getElementById('result3').innerHTML = convertToLink(reply.answer)
+    } catch (e) {
+        result3.style.color = "red";
+        result3.innerText = e.message;
+    } finally {
+        spinner.style.display = "none";
+    }
+
+    function convertToLink(str) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return str.replace(urlRegex, function(match) {
+            if (match.endsWith('.')) {
+                match = match.slice(0, -1); // Remove the trailing dot
+            }
+            return `<a href="${match}" target="_blank">${match}</a>`;
+        });
+    }
+}
+
+async function handleHttpErrors(res) {
+    if (!res.ok) {
+        const errorResponse = await res.json();
+        const msg = errorResponse.message ? errorResponse.message : "No error details provided"
+        throw new Error(msg)
+    }
+    return res.json()
 }
