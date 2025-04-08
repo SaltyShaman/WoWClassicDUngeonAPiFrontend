@@ -1,8 +1,13 @@
 const SERVER_URL = 'http://localhost:8080/api/v1/';
 
+const config = {
+    CLIENT_ID: '7fbd0e041c83432a9e1c40da29f82ca7',
+    CLIENT_SECRET: 'sV9HIyUuKl7VvNbaBsaD1lCGeN2hZsr3',
+};
 
 document.getElementById('form-joke').addEventListener('submit', getAnswer);
 // document.getElementById('form-answer').addEventListener('submit', getInfo);
+document.getElementById('form-wow').addEventListener('submit', getWoWCharacterInfo); // New form to fetch WoW data
 
 async function getAnswer(event) {
     // Prevent the form from reloading the page.
@@ -65,4 +70,44 @@ async function handleHttpErrors(res) {
         throw new Error(msg)
     }
     return res.json()
+}
+
+//WoW API
+
+async function loadConfig() {
+    const response = await fetch('config.json');
+    const config = await response.json();
+
+    console.log(config.CLIENT_ID);  // 'your-client-id'
+    console.log(config.CLIENT_SECRET);  // 'your-client-secret'
+}
+
+loadConfig();
+
+// Fetching WoW Character Info (New code)
+async function getWoWCharacterInfo(event) {
+    event.preventDefault();
+
+    const characterName = document.getElementById('wow-character-name').value; // e.g., Bobbymcbobs
+    const realmName = document.getElementById('wow-realm-name').value; // e.g., Pyrewood Village
+    const region = 'eu'; // Change to 'us', 'eu', etc., depending on region
+
+    const URL = `https://eu.api.blizzard.com/profile/wow/character/${realmName}/${characterName}?namespace=profile-${region}&locale=en_US&access_token=${config.CLIENT_ID}`;
+
+    const spinner = document.getElementById('spinner-wow');
+    const resultWow = document.getElementById('result-wow');
+    resultWow.innerText = "";
+    resultWow.style.color = "black";
+
+    try {
+        spinner.style.display = "block";
+        const response = await fetch(URL).then(handleHttpErrors);
+        // Display the character info
+        resultWow.innerText = `Character: ${response.name}, Level: ${response.level}, Class: ${response.character_class.name}`;
+    } catch (e) {
+        resultWow.style.color = "red";
+        resultWow.innerText = e.message;
+    } finally {
+        spinner.style.display = "none";
+    }
 }
