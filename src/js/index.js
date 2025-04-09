@@ -1,14 +1,14 @@
 const SERVER_URL = 'http://localhost:8080/api/v1/';
 
 
-document.getElementById('form-joke').addEventListener('submit', getAnswer);
+document.getElementById('form-answer').addEventListener('submit', getAnswer);
 // document.getElementById('form-answer').addEventListener('submit', getInfo);
 
 async function getAnswer(event) {
     // Prevent the form from reloading the page.
     event.preventDefault();
 
-    const URL = `${SERVER_URL}joke?about= + ${document.getElementById('about').value}`
+    const URL = `${SERVER_URL}answer?about= + ${document.getElementById('about').value}`
     const spinner = document.getElementById('spinner1');
     const result = document.getElementById('result');
     result.style.color = "black";
