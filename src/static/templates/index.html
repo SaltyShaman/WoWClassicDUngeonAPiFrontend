@@ -30,19 +30,16 @@
                         </div>
                         <div class="row mt-3">
                             <div class="column text-end">
-                                <button type="submit" class="btn btn-primary" id="btn-get-answer">Send question</button>
+                                <button style="margin-bottom: 20px;" type="submit" class="btn btn-primary" id="btn-get-answer">Send question</button>
                             </div>
                         </div>
+                        <div id="spinner1" class="spinner-border text-success" role="status" style="margin-left:1em;border-radius: 50%;display:none;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="row">
+                            <textarea id="result" class="result"></textarea>
+                        </div>
                     </form>
-                    <div id="spinner1" class="spinner-border text-success" role="status" style="margin-left:1em;border-radius: 50%;display:none;">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p id="result" class="result"></p>
-
-                    <div class="response-area">
-                        <textarea readonly></textarea>
-                    </div>
-
                 </div>
             </div>
         </div>
