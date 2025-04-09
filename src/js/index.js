@@ -1,13 +1,27 @@
 const SERVER_URL = 'http://localhost:8080/api/v1/';
 
-const config = {
-    CLIENT_ID: '7fbd0e041c83432a9e1c40da29f82ca7',
-    CLIENT_SECRET: 'sV9HIyUuKl7VvNbaBsaD1lCGeN2hZsr3',
-};
-
 document.getElementById('form-joke').addEventListener('submit', getAnswer);
 // document.getElementById('form-answer').addEventListener('submit', getInfo);
-document.getElementById('form-wow').addEventListener('submit', getWoWCharacterInfo); // New form to fetch WoW data
+document.getElementById('form-wow').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    document.getElementById('spinner-wow').style.display = 'inline-block';
+
+    const characterName = document.getElementById('wow-character-name').value.toLowerCase();
+    const realmName = document.getElementById('wow-realm-name').value.toLowerCase();
+
+    const data = await fetchCharacterProfile("eu", realmName, characterName);
+
+    if (data) {
+        document.getElementById("character-info").style.display = "block";
+        document.getElementById("char-name").textContent = data.name;
+        document.getElementById("char-realm").textContent = data.realm.slug;
+        document.getElementById("char-level").textContent = data.level;
+    } else {
+        document.getElementById("character-info").style.display = "none";
+    }
+
+    document.getElementById('spinner-wow').style.display = 'none';
+});
 
 async function getAnswer(event) {
     // Prevent the form from reloading the page.
@@ -72,42 +86,60 @@ async function handleHttpErrors(res) {
     return res.json()
 }
 
-//WoW API
+// WoW API credentials
+const config = {
+    CLIENT_ID: '7fbd0e041c83432a9e1c40da29f82ca7',
+    CLIENT_SECRET: 'sV9HIyUuKl7VvNbaBsaD1lCGeN2hZsr3',
+};
 
-async function loadConfig() {
-    const response = await fetch('config.json');
-    const config = await response.json();
+// Get access token from Blizzard
+async function getAccessToken() {
+    // Sending a POST request to Blizzard's OAuth endpoint to retrieve the access token
+    const response = await fetch("https://eu.battle.net/oauth/token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Basic " + btoa(`${config.CLIENT_ID}:${config.CLIENT_SECRET}`)
+        },
+        body: "grant_type=client_credentials" // request type for getting an access token
+    });
 
-    console.log(config.CLIENT_ID);  // 'your-client-id'
-    console.log(config.CLIENT_SECRET);  // 'your-client-secret'
+    // If the response is not OK (status code other than 200), throw an error
+    if (!response.ok) {
+        throw new Error("Failed to get access token");
+    }
+
+    // Parse the response as JSON and extract the access token
+    const data = await response.json();
+    return data.access_token;
 }
-
-loadConfig();
-
-// Fetching WoW Character Info (New code)
-async function getWoWCharacterInfo(event) {
-    event.preventDefault();
-
-    const characterName = document.getElementById('wow-character-name').value; // e.g., Bobbymcbobs
-    const realmName = document.getElementById('wow-realm-name').value; // e.g., Pyrewood Village
-    const region = 'eu'; // Change to 'us', 'eu', etc., depending on region
-
-    const URL = `https://eu.api.blizzard.com/profile/wow/character/${realmName}/${characterName}?namespace=profile-${region}&locale=en_US&access_token=${config.CLIENT_ID}`;
-
-    const spinner = document.getElementById('spinner-wow');
-    const resultWow = document.getElementById('result-wow');
-    resultWow.innerText = "";
-    resultWow.style.color = "black";
-
+async function fetchCharacterProfile(region = "eu", realmSlug = "draenor", characterName = "tjyna", namespace = "profile-eu", locale = "en_EU") {
     try {
-        spinner.style.display = "block";
-        const response = await fetch(URL).then(handleHttpErrors);
-        // Display the character info
-        resultWow.innerText = `Character: ${response.name}, Level: ${response.level}, Class: ${response.character_class.name}`;
-    } catch (e) {
-        resultWow.style.color = "red";
-        resultWow.innerText = e.message;
-    } finally {
-        spinner.style.display = "none";
+        const accessToken = await getAccessToken();
+
+        const url = `https://${region}.api.blizzard.com/profile/wow/character/${realmSlug}/${characterName}?namespace=${namespace}&locale=${locale}`;
+
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch character data: ${response.status} ${response.statusText}`);
+        }
+
+        const characterData = await response.json();
+        console.log("Character Profile:", characterData);
+        return characterData;
+
+    } catch (error) {
+        console.error("Error fetching character profile:", error);
     }
 }
+
+
+
+
+
+
