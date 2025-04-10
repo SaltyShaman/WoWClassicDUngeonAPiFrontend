@@ -1,6 +1,6 @@
 const SERVER_URL = 'http://localhost:8080/api/v1/';
 
-document.getElementById('form-answer').addEventListener('submit', getAnswer);
+document.getElementById('form-joke').addEventListener('submit', getAnswer);
 // document.getElementById('form-answer').addEventListener('submit', getInfo);
 document.getElementById('form-wow').addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -85,6 +85,7 @@ async function handleHttpErrors(res) {
     }
     return res.json()
 }
+
 // WoW API credentials
 const config = {
     CLIENT_ID: '7fbd0e041c83432a9e1c40da29f82ca7',
@@ -136,10 +137,3 @@ async function fetchCharacterProfile(region = "eu", realmSlug = "draenor", chara
         console.error("Error fetching character profile:", error);
     }
 }
-
-
-
-
-
-
-
