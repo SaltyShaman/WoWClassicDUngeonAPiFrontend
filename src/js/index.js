@@ -137,9 +137,3 @@ async function fetchCharacterProfile(region = "eu", realmSlug = "draenor", chara
         console.error("Error fetching character profile:", error);
     }
 }
-
-
-
-
-
-
