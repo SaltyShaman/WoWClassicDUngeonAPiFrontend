@@ -67,3 +67,23 @@
     resize: none;
 }
 
+.autocomplete-results {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 1000;
+}
+
+.autocomplete-results div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.autocomplete-results div:hover {
+    background-color: #f1f1f1;
+}
+
+
