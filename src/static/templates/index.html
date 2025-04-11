@@ -93,6 +93,29 @@
 
         </div>
     </div>
+
+    <div class="container">
+        <div class="card m-3">
+            <div class="card-body">
+                <h5 class="card-title">Ask GPT about your character</h5>
+                <form id="form-wow-chat">
+                    <div class="row mb-3">
+                        <label for="wow-question" class="form-label">Question about your WoW character</label>
+                        <input type="text" id="wow-question" class="form-control" placeholder="E.g. What level is my character?">
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Ask GPT</button>
+                    </div>
+                    <div id="spinner-wow-chat" class="spinner-border text-success mt-3" role="status" style="display:none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </form>
+                <div id="wow-chat-result" class="response-area mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+
 </main>
 <footer class="bg-dark text-light py-4">
     <div class="container">
