@@ -1,5 +1,8 @@
 const SERVER_URL = 'http://localhost:8080/api/v1/';
 
+
+document.getElementById('form-wow-chat').addEventListener('submit', askAboutCharacter);
+
 document.getElementById('form-joke').addEventListener('submit', getAnswer);
 // document.getElementById('form-answer').addEventListener('submit', getInfo);
 document.getElementById('form-wow').addEventListener('submit', async function (e) {
@@ -22,6 +25,7 @@ document.getElementById('form-wow').addEventListener('submit', async function (e
 
     document.getElementById('spinner-wow').style.display = 'none';
 });
+
 
 async function getAnswer(event) {
     // Prevent the form from reloading the page.
@@ -137,3 +141,43 @@ async function fetchCharacterProfile(region = "eu", realmSlug = "draenor", chara
         console.error("Error fetching character profile:", error);
     }
 }
+
+
+//ChatGPT and Blizzard
+async function askAboutCharacter(event) {
+    event.preventDefault();
+
+    const question = document.getElementById('wow-question').value;
+    const characterName = document.getElementById('wow-character-name').value.toLowerCase();
+    const realmName = document.getElementById('wow-realm-name').value.toLowerCase();
+
+    const spinner = document.getElementById('spinner-wow-chat');
+    const resultDiv = document.getElementById('wow-chat-result');
+    resultDiv.innerText = "";
+    resultDiv.style.color = "black";
+
+    try {
+        spinner.style.display = "block";
+
+        const character = await fetchCharacterProfile("eu", realmName, characterName);
+        if (!character) throw new Error("Kunne ikke hente karakterdata");
+
+        const response = await fetch(`http://localhost:8080/api/wowchat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                question: question,
+                character: character
+            })
+        }).then(handleHttpErrors);
+
+        resultDiv.innerText = response.answer;
+
+    } catch (e) {
+        resultDiv.style.color = "red";
+        resultDiv.innerText = e.message;
+    } finally {
+        spinner.style.display = "none";
+    }
+}
+
