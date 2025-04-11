@@ -137,3 +137,28 @@ async function fetchCharacterProfile(region = "eu", realmSlug = "draenor", chara
         console.error("Error fetching character profile:", error);
     }
 }
+
+async function fetchRealms() {
+    try {
+        const accessToken = await getAccessToken();
+
+        const url = `https://${region}.api.blizzard.com/profile/wow/character/${realmSlug}/${characterName}?namespace=${namespace}&locale=${locale}`;
+
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch realm data: ${response.status} ${response.statusText}`);
+        }
+
+        const realmData = await response.json();
+        console.log("realm:", realmData);
+        return realmData;
+
+    } catch (error) {
+        console.error("Error fetching realm:", error);
+    }
+}
