@@ -42,9 +42,12 @@
                                     <i class="bi bi-globe-europe-africa"></i>
                                 </span>
                                 <!--<input type="text" class="form-control" id="wow-realm-name" placeholder="Enter Realm Name">-->
-                                <select class="form-select" id="wow-realm-name">
-                                    <!-- Realms will be populated dynamically -->
-                                </select>
+                                <label for="wow-realm-name" class="form-label">Realm Name:</label>
+                                <input type="text" id="wow-realm-name" class="form-control" placeholder="Start typing realm name...">
+                                <div id="autocomplete-results" class="autocomplete-results" style="display: none;">
+                                    <!-- Search results will be displayed here -->
+                                </div>
+
                             </div>
                             <!--Option toggle to be implemented
                             <label for ="wow-realm-name">Realm Name</label>

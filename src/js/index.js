@@ -226,4 +226,42 @@ async function populateRealmDropdown() {
     // Optional: Call your autocomplete/search function here if needed
 }
 
+function showSuggestions(value) {
+    const resultsContainer = document.getElementById('autocomplete-results');
+    resultsContainer.innerHTML = ''; // Clear previous results
+    const filteredRealms = realms.filter(realm => realm.name.toLowerCase().includes(value.toLowerCase()));
+
+    if (filteredRealms.length > 0) {
+        resultsContainer.style.display = 'block'; // Show the results
+        filteredRealms.forEach(realm => {
+            const div = document.createElement('div');
+            div.textContent = realm.name;
+            div.addEventListener('click', function () {
+                document.getElementById('wow-realm-name').value = realm.name;  // Set the input value to the clicked realm name
+                resultsContainer.style.display = 'none';  // Hide the results after selection
+            });
+            resultsContainer.appendChild(div);
+        });
+    } else {
+        resultsContainer.style.display = 'none';  // Hide if no results
+    }
+}
+
+// Event listener for typing in the input field
+document.getElementById('wow-realm-name').addEventListener('input', function () {
+    const value = this.value;
+    if (value.length > 0) {
+        showSuggestions(value);  // Show matching results
+    } else {
+        document.getElementById('autocomplete-results').style.display = 'none';  // Hide results if input is empty
+    }
+});
+
+// Close suggestions if clicked outside
+document.addEventListener('click', function (event) {
+    if (!event.target.closest('#wow-realm-name')) {
+        document.getElementById('autocomplete-results').style.display = 'none';
+    }
+});
+
 populateRealmDropdown(); // Populate the dropdown on page load
