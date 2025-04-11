@@ -17,30 +17,42 @@
         <div class="container-fluid">
             <a class="text-decoration-none text-light"><i class="bi bi-shield-shaded fs-2"></i>ChatGPT API Usage Demo</a>
         </div>
-        <div>
-            <h2 class="text-decoration-none text-light">ChatGPT API Usage Demo</h2>
-        </div>
     </nav>
     <div class="container">
 
-        <h2>ChatGPT API Usage Demo</h2>
-
         <div class="container">
-            <h2>Open AI Demo</h2>
+            <h2>This program allows you to find info about X</h2>
             <!-- WoW Character Info Form -->
             <div class="container">
                 <div class="card m-3">
                     <div class="card-body">
                         <h5 class="card-title">Fetch WoW Character Info</h5>
                         <form id="form-wow" class="container">
-                            <div class="row">
-                                <label for="wow-character-name">Character Name</label>
-                                <input type="text" id="wow-character-name" placeholder="Enter Character Name">
+                            <label for="wow-character-name" class="form-label">Character Name:</label>
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+                                <input type="text" class="form-control" id="wow-character-name" placeholder="Enter Character Name">
                             </div>
-                            <div class="row mt-3">
-                                <label for="wow-realm-name">Realm Name</label>
-                                <input type="text" id="wow-realm-name" placeholder="Enter Realm Name">
+
+                            <label for="wow-realm-name" class="form-label">Realm Name:</label>
+                            <div class="mb-4 input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-globe-europe-africa"></i>
+                                </span>
+                                <input type="text" class="form-control" id="wow-realm-name" placeholder="Enter Realm Name">
                             </div>
+                            <!--Option toggle to be implemented
+                            <label for ="wow-realm-name">Realm Name</label>
+                            <select class="form-select" id="wow-realm-name">
+                                <option value="x" selected>x</option>
+                                <option value="x">y</option>
+                                <option value="x">z</option>
+                                <option value="x">a</option>
+                            </select>
+                            -->
+
                             <div class="row mt-3">
                                 <div class="column text-end">
                                     <button type="submit" class="btn btn-primary" id="btn-fetch-wow">Fetch Character</button>
@@ -70,8 +82,11 @@
                         <h5 class="card-title">Ask me! (simple)</h5>
                         <form id="form-joke" class="container">
                             <div class="row">
-                                <p class="card-text">Ask me about anything.</p>
-                                <label for="about">Topic</label>
+
+                     
+
+                                <label for="about"><strong>Topic</strong></label>
+
                                 <textarea id="about" class="result" placeholder="Enter your question here..."></textarea>
                             </div>
                             <div class="row mt-3">
@@ -83,6 +98,7 @@
                                 <span class="visually-hidden">Loading...</span>
                             </div>
                             <div class="row">
+                                <label for="about"><strong>Answer</strong></label>
                                 <textarea id="result" class="result"></textarea>
                             </div>
 
